@@ -21,9 +21,11 @@ const ELEMENT_DATA: PeriodicElement[] = [];
 export class DashboardComponent implements OnInit {
   displayedColumns: string[] = ['name', 'mobile', 'email', 'dob', 'role', 'view', 'delete'];
   dataSource = ELEMENT_DATA;
-  constructor(private repositoryService: MainService) { }
   users: ViewUser[];
   response: Response[];
+  
+  constructor(private repositoryService: MainService) { }
+ 
   ngOnInit() {
     this.loadTableData();
   }

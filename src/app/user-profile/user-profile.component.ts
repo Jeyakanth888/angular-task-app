@@ -18,10 +18,12 @@ export class UserProfileComponent implements OnInit {
   private userId: string;
   response: Response[];
   userData: ViewUser[];
-  constructor(private route: ActivatedRoute, private repositoryService: MainService) { }
   selectedFile: ImageSnippet;
   showloader: Boolean = false;
   userProfileImage: String = 'assets/images/Manager-512.png';
+  
+  constructor(private route: ActivatedRoute, private repositoryService: MainService) { }
+ 
   ngOnInit() {
     this.loadUserData();
   }
