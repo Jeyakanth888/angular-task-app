@@ -1,0 +1,55 @@
+.actionBtn {
+    margin-top: 5px;
+    margin-bottom: 2px;
+    font-size: 1.2em;
+    width:auto;
+  }
+  
+  .snapshot {
+    text-align: center;
+  }
+  .snapshot img {
+      max-width: 800px;
+      max-height: 800px;
+    }
+  
+  ul.links {
+    padding-bottom: 20px;
+  }
+  .h1-head{
+     text-align: center; 
+  }
+
+  .my-grid-list{
+    padding-top:24px !important;
+    padding-bottom:24px !important;
+    margin-top:24px !important;
+    margin-bottom:24px !important;
+
+  }
+  .my-grid-tile{
+    padding-top:90px !important;
+  }
+  .content{
+    min-height:500px;
+  }
+
+
+  .form-fields{
+    display:inline-block;
+    padding: 10px 0px 5px 50px;
+  }
+
+  .form-buttons .btn{
+    margin:0px 5px;
+  }
+
+  .form-fields .mat-form-field {
+    width:75%;
+  }
+  #alert-box{
+    display: block;
+  }
+  #alert-box.hide{
+    display: none;
+  }

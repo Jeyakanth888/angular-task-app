@@ -1,0 +1,20 @@
+.dashboard-cards {
+    margin:20px ;
+    padding:20px;
+}
+.dashboard-cards mat-card{
+    text-align:center;
+    color:#fff;
+}
+.dashboard-cards .completed mat-card{
+    background-color: green;
+}
+.dashboard-cards .pending mat-card{
+    background-color: orange;
+}
+.dashboard-cards .rejected mat-card{
+    background-color: red;
+}
+.dashboard-cards .all-users mat-card {
+    background-color: blue;
+}

@@ -1,0 +1,67 @@
+<div class="row">
+  <img src="assets/images/holistic-task-management.jpg" class="img-fluid profile-banner-img">
+</div>
+<div class="row" style="height:500px;">
+  <div class="col-md-9">
+    <mat-card class="profile-card">
+      <img src="assets/images/Loader.gif" class="img-fluid loader-icon"  [ngClass]="showloader===false?'hide' : ''" />
+      <img [src]= "userProfileImage" class="img-fluid profile-icon"/>
+      <input type="file" accept="image/*" #photoUpload class="upload-photo" (click)="photoUpload.value = null" (change)="importUserPhoto(photoUpload)"/>
+      <button mat-button class="btn btn-default" id="add-photo-btn" (click)="photoUpload.click()">Add Photo</button>
+      <h5>User Profile</h5>
+      <hr>
+      <div class="user-data">
+        <p>
+          <span class="data-head">Name</span>
+          <span class="divider">:</span>
+          <span class="data-body">{{userData.firstname}} {{userData.lastname}}
+          </span>
+        </p>
+        <p>
+          <span class="data-head">Mobile Number</span>
+          <span class="divider">:</span>
+          <span class="data-body">{{userData.mobilenumber}}</span>
+        </p>
+        <p>
+          <span class="data-head">Email</span>
+          <span class="divider">:</span>
+          <span class="data-body">{{userData.email}}</span>
+        </p>
+        <p>
+          <span class="data-head">D.O.B</span>
+          <span class="divider">:</span>
+          <span class="data-body">{{userData.dob | date}}
+          </span>
+        </p>
+        <p>
+          <span class="data-head">Marital Status</span>
+          <span class="divider">:</span>
+          <span class="data-body">{{userData.maritalstatus}}</span>
+        </p>
+        <p>
+          <span class="data-head">Address</span>
+          <span class="divider">:</span>
+          <span class="data-body">{{userData.street}} {{userData.city}} {{userData.state}}</span>
+        </p>
+      </div>
+    </mat-card>
+  </div>
+  <div class="col-md-3 cards">
+    <mat-card class="task-percentage">
+      <h5>Task Percentage</h5>
+      <h6>55%</h6>
+    </mat-card>
+    <mat-card class="total-task">
+      <h5>Total Task</h5>
+      <h6>13</h6>
+    </mat-card>
+    <mat-card class="completed-task">
+      <h5>Task Completed</h5>
+      <h6>7</h6>
+    </mat-card>
+    <mat-card class="pending-task">
+      <h5>Task Pending</h5>
+      <h6>6</h6>
+    </mat-card>
+  </div>
+</div>

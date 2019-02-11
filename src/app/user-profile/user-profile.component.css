@@ -1,0 +1,80 @@
+.profile-banner-img{
+    width:99%;
+    height:180px;
+}
+.profile-card h5{
+    text-align:center;
+}
+
+.profile-icon{
+    width:180px;
+    height:180px;
+    position: absolute;
+    top:-108px;
+    left:0px;
+}
+
+
+mat-card.completed-task{
+    background-color: green;
+}
+mat-card.pending-task{
+    background-color: orange;
+}
+
+mat-card.total-task {
+    background-color: blue;
+}
+mat-card.task-percentage {
+    background-color: aqua;
+}
+.cards mat-card{
+    margin:11px 33px;
+    text-align:center;
+    color:#fff;
+}
+
+span.data-head{
+    width:30%;
+    font-size:18px;
+    font-weight:500;
+    display:inline-block;
+}
+span.divider{
+    width:3%;
+    display:inline-block;
+}
+span.data-body{
+    width:60%;
+    font-size:16px;
+    display:inline-block;
+}
+
+button#add-photo-btn{
+    color:#fff;
+    background: rgba(0, 0, 0, 0.5);
+    width: 150px;
+    height: 44px;
+    left: -60px;
+    bottom: 10px;
+    position: relative;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+}
+input.upload-photo{
+    display:none;
+}
+
+
+.loader-icon {
+  width: 50px;
+  height: 50px;
+  z-index: 1;
+  position: relative;
+  bottom: 60px;
+  left: 40px;
+  opacity:1;
+}
+.loader-icon.hide{
+  opacity:0;
+}

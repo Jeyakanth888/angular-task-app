@@ -1,0 +1,56 @@
+<div class="row dashboard-cards" >
+    <div class="col-md-3 all-users ">
+        <mat-card><h4>All Users</h4><h5>{{dataSource.length}}</h5></mat-card>
+      </div>
+  <div class="col-md-3 completed">
+    <mat-card><h4>Task Completed</h4><h5>56</h5></mat-card>
+  </div>
+  <div class="col-md-3 pending">
+    <mat-card><h4>Task Pending</h4><h5>13</h5></mat-card>
+  </div>
+  <div class="col-md-3 rejected">
+    <mat-card><h4>Task Rejected</h4><h5>7</h5></mat-card>
+  </div>
+</div>
+
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+  <!-- Position Column -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="mobile">
+    <mat-header-cell *matHeaderCellDef> Mobile </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.mobile}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="email">
+    <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.email}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="dob">
+    <mat-header-cell *matHeaderCellDef> D.O.B </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.dob | date:'MMM d, y'}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="role">
+    <mat-header-cell *matHeaderCellDef> Role </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.role == 1 ? 'Admin' : element.role == 2 ? 'Sub Admin' : 'User'}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="view">
+    <mat-header-cell *matHeaderCellDef> View </mat-header-cell>
+    <mat-cell *matCellDef="let element"><a routerLink="/viewprofile/{{element._id}}"> <button mat-button class="btn btn-info" ><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="delete">
+    <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+    <mat-cell *matCellDef="let element"> <button mat-button class="btn btn-danger"> <i class="fa fa-trash-o"
+          aria-hidden="true"></i></button> </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;" ></mat-row>
+</mat-table>
+<mat-paginator [pageSizeOptions]="[5, 10,20]"></mat-paginator>

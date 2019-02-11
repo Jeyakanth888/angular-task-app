@@ -1,0 +1,125 @@
+<div class="row container content">
+  <div class="col-md-10 offset-1">
+    <div class="row">
+      <form [formGroup]="registerForm"  #registrationForm autocomplete="off" novalidate (ngSubmit)="submitRegisterForm(registerForm.value)">
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <input matInput placeholder="FirstName" required formControlName="firstName">
+            <mat-hint align="end">Not more then 15 chars long.</mat-hint>
+            <mat-error *ngIf="hasError('firstName', 'required')">Name is required</mat-error>
+            <mat-error *ngIf="hasError('firstName', 'maxlength')">You have more than 15 characters</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <input matInput placeholder="LastName" formControlName="lastName" required>
+            <mat-hint align="end">Not more then 15 chars long.</mat-hint>
+            <mat-error *ngIf="hasError('lastName', 'required')">Name is required</mat-error>
+            <mat-error *ngIf="hasError('lastName', 'maxlength')">You have more than 15 characters</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <input matInput placeholder="Email" formControlName="email" required>
+            <mat-error *ngIf="hasError('email', 'required')">Email is required</mat-error>
+            <mat-error *ngIf="hasError('email', 'email')">Not Valid Email</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <input type="number" matInput placeholder="Mobile Number" formControlName="mobileNumber" required>
+            <mat-error *ngIf="hasError('mobileNumber', 'required')">Ph Number is required</mat-error>
+            <mat-error *ngIf="hasError('mobileNumber', 'mobile')">Ph Number is Not Valid</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <mat-select placeholder="Gender" formControlName="gender">
+              <mat-option value="">Select</mat-option>
+              <mat-option value="male">Male</mat-option>
+              <mat-option value="female">Female</mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('gender', 'required')">Gender is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Date of Birth" formControlName="dob">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker startView="year" [startAt]="startDate"></mat-datepicker>
+            <mat-error *ngIf="hasError('dob', 'required')">DOB is required</mat-error>
+            <mat-error *ngIf="hasError('dob', 'dob')">DOB is Not Valid</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <mat-select placeholder="State" (selectionChange)="onSelectionCity($event)" formControlName="state">
+              <mat-option value="">State</mat-option>
+              <mat-option *ngFor="let state of allStates; let i =index" value="{{i}}">{{state}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('state', 'required')">State is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <mat-select placeholder="City" formControlName="city">
+              <mat-option value="">City</mat-option>
+              <mat-option *ngFor="let city of selectedStateCities; let i =index" value="{{city}}">{{city}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('city', 'required')">City is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <mat-select placeholder="Marital Status" formControlName="maritalStatus">
+              <mat-option value="">Select</mat-option>
+              <mat-option value="single">Single</mat-option>
+              <mat-option value="married">Married</mat-option>
+              <mat-option value="divorced">Divorced</mat-option>
+              <mat-option value="widowed">Widowed</mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('maritalStatus', 'required')">Marital Status is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <mat-select placeholder="User Role" formControlName="userRole">
+              <mat-option value="">Select</mat-option>
+              <mat-option value=1>Admin</mat-option>
+              <mat-option value=2>Sub Admin</mat-option>
+              <mat-option value=3>User</mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('userRole', 'required')">Role is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12 form-fields">
+          <mat-form-field>
+            <textarea matInput placeholder="Address" formControlName="address" required></textarea>
+            <mat-error *ngIf="hasError('address', 'required')">Address is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-8">
+                <div class="alert alert-success" id="alert-box" #alertMessageBox  [ngClass]="showAlertBox===false?'hide' : ''" >
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                    <strong>Success! </strong>
+                    <p>{{successMsg}}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+              <mat-card-actions class="form-buttons">
+                <button mat-button class="btn btn-danger" id="btn-cancel">Cancel</button>
+                <button mat-button class="btn btn-primary" id="btn-submit">Submit</button>
+              </mat-card-actions>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
