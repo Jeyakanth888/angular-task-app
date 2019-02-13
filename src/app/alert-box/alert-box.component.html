@@ -1,0 +1,4 @@
+<div class="alert  alert-box"  #alertMessageBox  [ngClass]="receiveMessage.status=='SUCCESS'?'alert-success' : 'alert-danger'" >
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong><p>{{receiveMessage.message}}</p></strong>
+</div>

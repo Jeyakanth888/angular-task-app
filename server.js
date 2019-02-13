@@ -6,6 +6,9 @@ const port = 4000;
 const db = require('./db/dbConfig');
 const user = db.users;
 const userPhotos = db.usersprofileimages;
+const assignmentTopics = db.assignment_topics;
+const assignedTasks = db.assigned_tasks;
+
 app.use(bodyParser.json({
   limit: '50mb',
   extended: true
@@ -14,7 +17,6 @@ app.use(bodyParser.urlencoded({
   extended: true,
   limit: '50mb'
 }));
-
 app.use(cors());
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
@@ -88,7 +90,6 @@ app.post('/api/register', (req, res, next) => {
   const formData = req.body;
   checkUserAvail(formData.mobilenumber, formData.email).then(results => {
     if (!results) {
-      const formData = req.body;
       user.create(formData, function (err, response) {
         if (err) return next(err);
         data['data'] = response;
@@ -131,17 +132,22 @@ app.get('/api/getUserDetails/:id', (req, res, next) => {
 
     userPhotos.find({
       'ref_id': userId,
-      'imageactive':true
+      'imageactive': true
     }, function (err, result) {
-      const profileImg = result[0].imagepath;
+      if (result.length > 0) {
+        let profileImg = result[0].imagepath;
+      } else {
+        profileImg = '' ;
+      }
       userData[0].profileimage = profileImg;
       data['data'] = userData;
       data['status'] = "OK";
       res.json(data);
-    });   
+    });
   });
 });
 
+/* ----------- Upload the User Photo -------------- */
 app.post('/api/uploadPhoto', (req, res, next) => {
   upload(req, res, function (err) {
     const userId = req.body.ref_id;
@@ -173,7 +179,39 @@ app.post('/api/uploadPhoto', (req, res, next) => {
         });
       });
   });
+});
 
+/* --------- Add new assignment Topic Name ----------------  */
+app.post('/api/addNewAssignmentTopic', (req, res, next) => {
+  const formData = req.body;
+  assignmentTopics.create(formData, function (err, response) {
+    if (err) return next(err);
+    data['data'] = response;
+    data['status'] = "OK";
+    data['message'] = "One New Topic is Added!";
+    res.json(data);
+  });
+});
+
+/* --------- get All Topics list ----------------  */
+app.get('/api/getAllTopics', (req, res, next) => {
+  assignmentTopics.find({}, function (err, topics) {
+    if (err) return next(err);
+    data['data'] = topics;
+    data['status'] = "OK";
+    res.json(data);
+  });
+});
+
+/*---------- submit task to user -------------- */
+app.post('/api/submitTask', (req, res, next) => {
+  const taskData = req.body;
+  assignedTasks.create(taskData, (err, response) => {
+    if (err) return next(err);
+    data['status'] = "OK";
+    data['message'] = "Successfully task added to the user!";
+    res.json(data);
+  });
 });
 
 app.get('/api/test', (req, res, next) => {

@@ -47,9 +47,9 @@
   .form-fields .mat-form-field {
     width:75%;
   }
-  #alert-box{
+  .alert-box{
     display: block;
   }
-  #alert-box.hide{
+  .alert-box.hide{
     display: none;
   }

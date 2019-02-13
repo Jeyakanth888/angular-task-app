@@ -1,7 +1,6 @@
 import { Component, OnInit, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
-import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -19,12 +18,11 @@ export class RegistrationComponent implements OnInit {
   allStateCities: any[];
   selectedStateCities = [];
   startDate = new Date(1990, 0, 1);
-  successMsg: String = '';
-  errorMsg: String = '';
+ 
   showAlertBox: Boolean = false;
+  apiResponseStatus:Object = {message: '', status: '' } ;
   userRoles = { 1: 'Admin', 2: 'Sub Admin', 3: 'User' };
 
-  @ViewChild('alertMessageBox') alertBox: ElementRef;
   @ViewChild('registrationForm') myRegisterForm: NgForm;
 
   constructor(private location: Location, private repositoryService: MainService) { }
@@ -117,10 +115,12 @@ export class RegistrationComponent implements OnInit {
     this.repositoryService.submitRegister(userInfo)
       .subscribe(data => {
         if (data['status'] === 'OK') {
-          this.successMsg = data['message'];
+          this.apiResponseStatus['message'] = data['message'];
+          this.apiResponseStatus['status']     = 'SUCCESS' ;
           this.showAlertBox = true;
         } else {
-          this.errorMsg = data['message'];
+          this.apiResponseStatus['message'] = data['message'];
+          this.apiResponseStatus['status']     = 'ERROR' ;
           this.showAlertBox = true;
         }
         setTimeout(function () {

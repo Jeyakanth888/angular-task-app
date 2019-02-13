@@ -8,7 +8,7 @@ import {
   MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule,
   MatCardModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatSelectModule,
   MatDatepickerModule, MatNativeDateModule, MatTableModule, MatTabsModule, MatPaginatorModule, MatProgressSpinnerModule,
-  MatSortModule
+  MatSortModule, MatDialogModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrationComponent } from './registration/registration.component';
@@ -19,6 +19,10 @@ import { MainService } from './services/main.service';
 import { TaskAssignmentComponent } from './task-assignment/task-assignment.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ChartsComponent } from './charts/charts.component';
+import { AssignmentTopicComponent } from './assignment-topic/assignment-topic.component';
+import { AlertBoxComponent } from './alert-box/alert-box.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +31,9 @@ import { ChartsComponent } from './charts/charts.component';
     DashboardComponent,
     TaskAssignmentComponent,
     UserProfileComponent,
-    ChartsComponent
+    AssignmentTopicComponent,
+    ChartsComponent,
+    AlertBoxComponent,
   ],
   imports: [
     HttpClientModule,
@@ -51,11 +57,13 @@ import { ChartsComponent } from './charts/charts.component';
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatSortModule,
+    MatDialogModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule
   ],
   providers: [MainService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AssignmentTopicComponent]
 })
 export class AppModule { }

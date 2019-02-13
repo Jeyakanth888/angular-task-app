@@ -1,0 +1,22 @@
+.form-fields{
+    display:inline-block;
+    padding: 10px 0px 5px 50px;
+  }
+
+  .form-buttons .btn{
+    margin:0px 5px;
+  }
+
+  .form-fields .mat-form-field {
+    width:75%;
+  }
+
+  #btn-add-topic {
+      float:right;
+      top: 30px;
+     right: 60px;
+  }
+
+  #task-form-row{
+      margin-top:100px;
+  }

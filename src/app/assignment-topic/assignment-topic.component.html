@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Add Assignement Topic</h1>
+<form [formGroup]="topicForm" #addTopicForm autocomplete="off" novalidate (ngSubmit)="submitnewTopicForm(topicForm.value)">
+  <mat-dialog-content>
+    <mat-form-field class="topic-form-input">
+      <input matInput placeholder="Topic Name" formControlName="topicName" required>
+      <mat-error *ngIf="hasError('topicName', 'required')">Topic is required</mat-error>
+      <mat-error *ngIf="hasError('topicName', 'maxlength')">You have more than 25 characters</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="topic-form-input">
+      <textarea matInput placeholder="Topic Description" formControlName="topicDescription" required></textarea>
+      <mat-error *ngIf="hasError('topicDescription', 'required')">Description is required</mat-error>
+      <mat-error *ngIf="hasError('topicDescription', 'minlength')">You should enter 100 characters</mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+  <app-alert-box *ngIf="showAlertBox" [msgInfo]="apiResponseStatus"></app-alert-box>
+  <mat-dialog-actions>
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-button class="btn btn-primary">Add</button>
+  </mat-dialog-actions>
+</form>

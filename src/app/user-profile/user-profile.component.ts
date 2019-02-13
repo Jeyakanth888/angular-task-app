@@ -21,9 +21,9 @@ export class UserProfileComponent implements OnInit {
   selectedFile: ImageSnippet;
   showloader: Boolean = false;
   userProfileImage: String = 'assets/images/Manager-512.png';
-  
+
   constructor(private route: ActivatedRoute, private repositoryService: MainService) { }
- 
+
   ngOnInit() {
     this.loadUserData();
   }
@@ -34,8 +34,10 @@ export class UserProfileComponent implements OnInit {
         this.response = respData;
         this.userData = this.response['data'][0];
         const getImagePath = this.userData['profileimage'];
-        const path: String = getImagePath.replace(/\\/g, '/').replace('src/', '');
-        this.userProfileImage = path;
+        if (getImagePath !== '') {
+          const path: String = getImagePath.replace(/\\/g, '/').replace('src/', '');
+          this.userProfileImage = path;
+        }
       } else {
 
       }

@@ -1,3 +1,55 @@
-<p>
-  task-assignment works!
-</p>
+<div class="row container content">
+  <div class="col-md-10 offset-1">
+    <button mat-button class="btn btn-info" (click)="openAddTopicDialog()" id="btn-add-topic">
+      <i class="fa fa-plus" aria-hidden="true"></i> Add Topic</button>
+    <div class="row" id="task-form-row">
+      <form [formGroup]="taskForm" autocomplete="off" novalidate (ngSubmit)="submitTaskForm(taskForm.value)">
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <mat-select placeholder="Select User" required formControlName="assignUser">
+              <mat-option value="">Select</mat-option>
+              <mat-option  *ngFor='let user of users ;let i =index' value="{{user._id}}">{{user.name}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('assignUser', 'required')">Please Select User</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <mat-select placeholder="Select Topic" (selectionChange)="onSelectTopic($event)" required formControlName="assignTopic">
+              <mat-option value="">Select Topic</mat-option>
+              <mat-option *ngFor='let topic of topics ;let i =index' value="{{i}}">{{topic.topicname}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('assignUser', 'required')">Please Select Topic</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Select Date" required formControlName="assignDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="hasError('assignDate', 'required')">Please Select Date</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 form-fields">
+          <mat-form-field>
+            <textarea matInput placeholder="Description" disabled>{{selectedTopicDescription}}</textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-8">
+                <app-alert-box *ngIf="showAlertBox" [msgInfo]="apiResponseStatus"></app-alert-box>
+            </div>
+            <div class="col-md-4">
+              <mat-card-actions class="form-buttons">
+                <button mat-button class="btn btn-danger btn-cancel" type="button">Cancel</button>
+                <button mat-button class="btn btn-primary btn-submit">Submit</button>
+              </mat-card-actions>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

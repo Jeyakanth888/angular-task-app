@@ -14,8 +14,9 @@ const httpOptions = {
 export class MainService {
 
   constructor(private http: HttpClient) { }
-  private submitRegisterUrl = 'http://localhost:4000/api/register';  // URL to web api
-  private getUsersUrl = 'http://localhost:4000/api/getUsers';  // URL to web api
+  private submitRegisterUrl = 'http://localhost:4000/api/register';
+  private getUsersUrl = 'http://localhost:4000/api/getUsers';
+  private addNewTopicUrl = 'http://localhost:4000/api/addNewAssignmentTopic';
 
   submitRegister(values): Observable<Response[]> {
     return this.http.post<Response[]>(this.submitRegisterUrl, JSON.stringify(values), httpOptions)
@@ -25,7 +26,7 @@ export class MainService {
   }
 
   getUsers(): Observable<Response[]> {
-    return this.http.get<Response[]>(this.getUsersUrl, httpOptions)
+    return this.http.get<Response[]>(this.getUsersUrl)
       .pipe(
         map(response => response
         ));
@@ -44,6 +45,21 @@ export class MainService {
 
   getStates() {
     return this.http.get<any[]>('../assets/data/state-city.json').pipe(map(response => response));
+  }
+
+  submitNewTopic(values): Observable<Response[]> {
+    return this.http.post<Response[]>(this.addNewTopicUrl, JSON.stringify(values), httpOptions)
+      .pipe(
+        tap(response => response
+        ));
+  }
+
+  submitTaskAssignment(values): Observable<Response[]> {
+    return this.http.post<Response[]>('http://localhost:4000/api/submitTask', JSON.stringify(values), httpOptions).pipe(tap(response => response))
+  }
+
+  getTopics(): Observable<Response[]> {
+    return this.http.get<Response[]>('http://localhost:4000/api/getAllTopics').pipe(map(response => response));
   }
 
 }

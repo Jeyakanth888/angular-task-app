@@ -10,7 +10,7 @@
       <button mat-button class="btn btn-default" id="add-photo-btn" (click)="photoUpload.click()">Add Photo</button>
       <h5>User Profile</h5>
       <hr>
-      <div class="user-data">
+      <div class="user-data" *ngIf="userData">
         <p>
           <span class="data-head">Name</span>
           <span class="divider">:</span>
