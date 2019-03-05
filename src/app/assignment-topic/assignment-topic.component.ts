@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, EventEmitter, Output  } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, EventEmitter, Output } from '@angular/core';
 import { FormControl, Validators, FormGroup, NgForm } from '@angular/forms';
 import { Topic } from '../models/topic';
 import { MainService } from '../services/main.service';
@@ -26,7 +26,7 @@ export class AssignmentTopicComponent implements OnInit {
     });
   }
 
-  
+
   public submitnewTopicForm = (addTopicFormValue) => {
     if (this.topicForm.valid) {
       this.topicFormDataSubmit(addTopicFormValue);
@@ -44,7 +44,7 @@ export class AssignmentTopicComponent implements OnInit {
       topic_name: topicFormValues.topicName,
       topic_description: topicFormValues.topicDescription,
       created_at: curDate
-    }
+    };
 
     this.repositoryService.submitNewTopic(newTopicInfo)
       .subscribe(data => {
@@ -53,7 +53,10 @@ export class AssignmentTopicComponent implements OnInit {
           this.apiResponseStatus['status'] = 'SUCCESS';
           this.showAlertBox = true;
           const addedData = data['data'];
-          const newTopicObj: Object = { '_id': addedData._id, 'topicname': addedData.topic_name, 'topicdescription': addedData.topic_description }
+          const newTopicObj: Object = {
+            '_id': addedData._id, 'topicname': addedData.topic_name,
+            'topicdescription': addedData.topic_description
+          };
           this.newTopicInfo = newTopicObj;
           this.newTopicAdded.emit(this.newTopicInfo);
         } else {

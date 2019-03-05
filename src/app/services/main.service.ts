@@ -55,11 +55,24 @@ export class MainService {
   }
 
   submitTaskAssignment(values): Observable<Response[]> {
-    return this.http.post<Response[]>('http://localhost:4000/api/submitTask', JSON.stringify(values), httpOptions).pipe(tap(response => response))
+    return this.http.post<Response[]>('http://localhost:4000/api/submitTask', JSON.stringify(values), httpOptions)
+      .pipe(tap(response => response));
   }
 
   getTopics(): Observable<Response[]> {
     return this.http.get<Response[]>('http://localhost:4000/api/getAllTopics').pipe(map(response => response));
+  }
+
+  getAllUsersTasks(): Observable<Response[]> {
+    return this.http.get<Response[]>('http://localhost:4000/api/getAllTasks').pipe(map(response => response));
+  }
+
+  getUserAllTasks(userId): Observable<Response[]> {
+    return this.http.get<Response[]>(`http://localhost:4000/api/getUserTasks/${userId}`).pipe(map(response => response));
+  }
+
+  getTopicInfo(taskId): Observable<Response[]> {
+    return this.http.get<Response[]>(`http://localhost:4000/api/getTopicDetails/${taskId}`).pipe(map(response => response))
   }
 
 }

@@ -5,13 +5,20 @@ import { TaskAssignmentComponent } from './task-assignment/task-assignment.compo
 import { RegistrationComponent } from './registration/registration.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { LoginComponent } from './login/login.component';
+import { UpdatePasswordComponent } from './update-password/update-password.component';
+import { UserTaskComponent } from './user-task/user-task.component';
+import { AuthGuard } from './services/auth.guard';
 
 const appRoutes: Routes = [
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'registration', component: RegistrationComponent },
-  { path: 'assigntask', component: TaskAssignmentComponent },
-  { path: 'viewprofile/:id', component: UserProfileComponent },
-  { path: '', component: DashboardComponent }
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'registration', component: RegistrationComponent, canActivate: [AuthGuard] },
+  { path: 'assigntask', component: TaskAssignmentComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: 'viewprofile/:id', component: UserProfileComponent, canActivate: [AuthGuard] },
+  { path: 'updatepassword', component: UpdatePasswordComponent },
+  { path: '', component: LoginComponent},
+  { path: 'viewtask', component: UserTaskComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
@@ -19,7 +26,7 @@ const appRoutes: Routes = [
     CommonModule,
     RouterModule.forRoot(appRoutes)
   ],
-  exports: [ RouterModule ],
+  exports: [RouterModule],
   declarations: []
 })
 export class AppRoutingModule { }

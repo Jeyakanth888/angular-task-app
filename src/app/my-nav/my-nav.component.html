@@ -1,29 +1,27 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav
-    #drawer
-    class="sidenav"
-    fixedInViewport="true"
-    [attr.role]="isHandset ? 'dialog' : 'navigation'"
-    [mode]="(isHandset | async)!.matches ? 'over' : 'side'"
-    [opened]="!(isHandset | async)!.matches">
+  <mat-sidenav *ngIf="isUserLoggedIn" #drawer class="sidenav" fixedInViewport="true" [attr.role]="isHandset ? 'dialog' : 'navigation'"
+    [mode]="(isHandset | async)!.matches ? 'over' : 'side'" [opened]="!(isHandset | async)!.matches">
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/dashboard">Dashboard</a> 
-      <a mat-list-item routerLink="/registration">Registration</a> 
-      <a mat-list-item routerLink="/assigntask">Assign a Task</a>
+      <a mat-list-item routerLink="/dashboard">Dashboard</a>
+      <a mat-list-item routerLink="/registration" *ngIf="userRole!='user'">Registration</a>
+      <a mat-list-item routerLink="/assigntask" *ngIf="userRole!='user'">Assign a Task</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="(isHandset | async)!.matches">
+
+    <mat-toolbar color="primary" *ngIf="isUserLoggedIn">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="(isHandset | async)!.matches">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>Task Management</span>
+      <div class="right-nav">
+        <span class="profile-name">{{loggedUserName}}</span>
+        <span>
+          <a mat-list-item (click) = "logout()" class="btn-logout">
+            <i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+        </span>
+      </div>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

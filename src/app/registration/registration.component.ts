@@ -18,9 +18,9 @@ export class RegistrationComponent implements OnInit {
   allStateCities: any[];
   selectedStateCities = [];
   startDate = new Date(1990, 0, 1);
- 
+
   showAlertBox: Boolean = false;
-  apiResponseStatus:Object = {message: '', status: '' } ;
+  apiResponseStatus: Object = {message: '', status: '' } ;
   userRoles = { 1: 'Admin', 2: 'Sub Admin', 3: 'User' };
 
   @ViewChild('registrationForm') myRegisterForm: NgForm;

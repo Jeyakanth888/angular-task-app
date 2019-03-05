@@ -21,11 +21,18 @@ export class UserProfileComponent implements OnInit {
   selectedFile: ImageSnippet;
   showloader: Boolean = false;
   userProfileImage: String = 'assets/images/Manager-512.png';
+  totalCount: any;
+  pendingCount: Number;
+  completedCount: any;
+  rejectedCount: Number;
+  holdCount: Number;
+  taskPercentage: Number;
 
   constructor(private route: ActivatedRoute, private repositoryService: MainService) { }
 
   ngOnInit() {
     this.loadUserData();
+    this.findTaskCounts();
   }
   loadUserData(): void {
     this.userId = this.route.snapshot.paramMap.get('id');
@@ -66,6 +73,17 @@ export class UserProfileComponent implements OnInit {
   private uploadOnError() {
     this.showloader = false;
     this.userProfileImage = 'assets/images/Manager-512.png';
+  }
+
+  findTaskCounts() {
+    const allUserTasks = JSON.parse(localStorage.getItem('usersTasksDetails'));
+    const getTasks = allUserTasks.filter(usersTask => usersTask['ref_id'] === this.userId);
+    this.totalCount = getTasks.length;
+    this.pendingCount = getTasks.filter(task => task['completed_status'] === 0).length;
+    this.completedCount = getTasks.filter(task => task['completed_status'] === 1).length;
+    this.rejectedCount = getTasks.filter(task => task['completed_status'] === 2).length;
+    this.holdCount = getTasks.filter(task => task['completed_status'] === 3).length;
+    this.taskPercentage = this.completedCount / this.totalCount * 100;
   }
 
 }

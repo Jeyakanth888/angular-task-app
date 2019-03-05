@@ -41,7 +41,7 @@
         <p>
           <span class="data-head">Address</span>
           <span class="divider">:</span>
-          <span class="data-body">{{userData.street}} {{userData.city}} {{userData.state}}</span>
+          <span class="data-body">{{userData.address.street}}, {{userData.address.city}}, {{userData.address.state}}</span>
         </p>
       </div>
     </mat-card>
@@ -49,19 +49,19 @@
   <div class="col-md-3 cards">
     <mat-card class="task-percentage">
       <h5>Task Percentage</h5>
-      <h6>55%</h6>
+      <h6>{{taskPercentage}}%</h6>
     </mat-card>
     <mat-card class="total-task">
       <h5>Total Task</h5>
-      <h6>13</h6>
+      <h6>{{totalCount}}</h6>
     </mat-card>
     <mat-card class="completed-task">
       <h5>Task Completed</h5>
-      <h6>7</h6>
+      <h6>{{completedCount}}</h6>
     </mat-card>
     <mat-card class="pending-task">
       <h5>Task Pending</h5>
-      <h6>6</h6>
+      <h6>{{pendingCount}}</h6>
     </mat-card>
   </div>
 </div>

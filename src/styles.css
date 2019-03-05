@@ -2,3 +2,21 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 @import "~font-awesome/css/font-awesome.css";
 body { margin: 0; }
+html, body {
+    height: 100%;
+     margin:0;
+      padding:0;
+      font-family: 'Lato', sans-serif;
+}
+
+.bg-body {
+    width: 100vw;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+

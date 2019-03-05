@@ -1,3 +1,48 @@
-<p>
-  login works!
-</p>
+<div class="bg-body">
+  <mat-card class="panel-card">
+    <mat-card-header class="panel-card-header">
+      <mat-card-title>Login</mat-card-title>
+    </mat-card-header>
+    <form [formGroup]="loginForm" autocomplete="off" novalidate (ngSubmit)="submitLoginForm(loginForm.value)">
+      <mat-card-content class="panel-card-body">
+        <table class="example-full-width" cellspacing="0">
+          <tr>
+            <td>
+              <mat-form-field class="login-form-field">
+                <input matInput placeholder="User Email or Mobile"  formControlName="user_email_mobile" 
+                  (keyup)="onKeyupUser($event)">
+              <mat-error *ngIf="hasError('user_email_mobile', 'required')">Please Enter Mobile or Email.Can't Empty</mat-error>
+              <mat-error *ngIf="hasError('user_email_mobile', 'email') && !notvalidMobile">Email is not Valid</mat-error>
+              <mat-error *ngIf="notvalidMobile">If mobile number should min 6 digits.</mat-error>
+               <mat-error *ngIf="notValidEmail">Email is not Valid.</mat-error> 
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <mat-form-field class="login-form-field">
+                <input matInput placeholder="Password" type="password" formControlName="password" required>
+                <mat-error *ngIf="hasError('password', 'required')">Please Enter the Password</mat-error>
+                <mat-error *ngIf="hasError('password', 'minlength')">Password should be min 6 chars.</mat-error>
+              </mat-form-field>
+            </td>
+          </tr>
+        </table>
+        <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+        <a class="forget-password"  routerLink="/updatepassword" >Forget Password</a>
+      </mat-card-content>
+      <mat-card-actions class="login-row">
+        <button class="login-btn" mat-raised-button  color="primary">Login</button>
+      </mat-card-actions>
+    
+    </form>
+    <br>
+    <mat-card-actions class="social-btns">
+      <button (click)="socialSignIn('google')" mat-raised-button class="btn-google" type="button">
+        <i class="fa fa-google-plus" aria-hidden="true"></i> Login with Google</button>
+      <button (click)="socialSignIn('facebook')" mat-raised-button class="btn-facebook" type="button">
+        <i class="fa fa-facebook" aria-hidden="true"></i> Login with Facebook</button>
+    </mat-card-actions>
+    <app-alert-box *ngIf="showAlertBox"  [msgInfo]="apiResponseStatus"></app-alert-box>
+  </mat-card>
+</div>

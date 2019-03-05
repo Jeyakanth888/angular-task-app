@@ -18,6 +18,11 @@ export class TaskAssignmentComponent implements OnInit {
   topics: any[];
   selectedTopicDescription: String = '';
   addTopicDialogRef: MatDialogRef<AssignmentTopicComponent>;
+  minDate = new Date();
+  dateFilter = (date: Date) => date.getMonth() - 1 && date.getDate() - 1;
+  selectedUser: string;
+  selectedTopic: any;
+  disableSubmitTask: Boolean = false;
 
   constructor(private repositoryService: MainService, private addTopicDialog: MatDialog) { }
 
@@ -39,14 +44,18 @@ export class TaskAssignmentComponent implements OnInit {
   }
 
   getAllUsers() {
+    const getLoggedInUserId = localStorage.getItem('userLoggedIn');
     this.repositoryService.getUsers().subscribe(respData => {
       const usersData = respData['data'];
       const userArr = [];
       usersData.map((userInfo) => {
+        const getRespUserId = userInfo._id;
         const userObj: Object = {
           '_id': userInfo._id, 'name': userInfo.firstname + ' ' + userInfo.lastname
         };
-        userArr.push(userObj);
+        if (getLoggedInUserId !== 'NULL' && getLoggedInUserId !== getRespUserId) {
+          userArr.push(userObj);
+        }
       });
       this.users = userArr;
     });
@@ -76,14 +85,45 @@ export class TaskAssignmentComponent implements OnInit {
   }
 
   onSelectTopic(ele) {
-    console.log(ele);
     const selectedTopicIndex = ele.value;
     if (selectedTopicIndex !== '') {
+      this.checkExistTasktoUser();
       const tObj = this.topics[selectedTopicIndex];
       this.selectedTopicDescription = tObj.topicdescription;
     } else {
       this.selectedTopicDescription = '';
     }
+  }
+
+  onSelectUser(ele) {
+    const selectedUserIndex = ele.value;
+    if (selectedUserIndex !== '') {
+      this.checkExistTasktoUser();
+    }
+  }
+
+  checkExistTasktoUser() {
+    this.showAlertBox = false;
+    if (this.selectedUser !== '' && this.selectedTopic !== '') {
+      this.disableSubmitTask = false;
+      if (this.findTaskExist(this.selectedUser, this.selectedTopic)) {
+        this.disableSubmitTask = true;
+        const errorMsg = 'This topic has been already assigned to this user';
+        this.showAlertBoxMessage(errorMsg, 'ERROR');
+      }
+    }
+  }
+
+  findTaskExist(userId, taskIndex) {
+    let flag = false;
+    const taskId = this.topics[taskIndex]._id;
+    const allUserTasks = JSON.parse(localStorage.getItem('usersTasksDetails'));
+    const getTasks = allUserTasks.filter(usersTask => usersTask['ref_id'] === userId);
+    const findTask = getTasks.filter(tasks => tasks['t_id'] === taskId);
+    if (findTask.length !== 0) {
+      flag = true;
+    }
+    return flag;
   }
 
   public submitTaskForm = (taskFormValues) => {
@@ -101,26 +141,29 @@ export class TaskAssignmentComponent implements OnInit {
       t_id: taskAssignment_id,
       task_date: taskFormValues.assignDate,
       created_at: curDate,
+      completed_status: 0,
+      completed_at: curDate
     };
-
 
     this.repositoryService.submitTaskAssignment(taskAssignmentInfo)
       .subscribe(data => {
+        let statusType;
         if (data['status'] === 'OK') {
-          this.apiResponseStatus['message'] = data['message'];
-          this.apiResponseStatus['status'] = 'SUCCESS';
-          this.showAlertBox = true;
-
+          statusType = 'SUCCESS';
         } else {
-          this.apiResponseStatus['message'] = data['message'];
-          this.apiResponseStatus['status'] = 'ERROR';
-          this.showAlertBox = true;
+          statusType = 'ERROR';
         }
-        setTimeout(function () {
-          this.showAlertBox = false;
-        }, 2000);
+        this.showAlertBoxMessage(data['message'], statusType);
       });
+  }
 
+  showAlertBoxMessage(msg, alertStatus) {
+    this.apiResponseStatus['message'] = msg;
+    this.apiResponseStatus['status'] = alertStatus;
+    this.showAlertBox = true;
+    setTimeout(function () {
+      this.showAlertBox = false;
+    }, 3000);
   }
 
 }

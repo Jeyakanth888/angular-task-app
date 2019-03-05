@@ -7,10 +7,13 @@ import { LayoutModule } from '@angular/cdk/layout';
 import {
   MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule,
   MatCardModule, MatGridListModule, MatFormFieldModule, MatInputModule, MatSelectModule,
-  MatDatepickerModule, MatNativeDateModule, MatTableModule, MatTabsModule, MatPaginatorModule, MatProgressSpinnerModule,
-  MatSortModule, MatDialogModule
+  MatDatepickerModule, MatNativeDateModule, MatTableModule, MatTabsModule, MatPaginatorModule,
+  MatProgressSpinnerModule, MatSortModule, MatDialogModule, MatMenuModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider
+} from 'angular-6-social-login';
 import { RegistrationComponent } from './registration/registration.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -21,7 +24,27 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ChartsComponent } from './charts/charts.component';
 import { AssignmentTopicComponent } from './assignment-topic/assignment-topic.component';
 import { AlertBoxComponent } from './alert-box/alert-box.component';
+import { LoginComponent } from './login/login.component';
+import { UpdatePasswordComponent } from './update-password/update-password.component';
+import { AuthGuard } from './services/auth.guard';
+import { LoginService } from './services/login.service';
+import { UserTaskComponent } from './user-task/user-task.component';
 
+// Configs
+export function getAuthServiceConfigs() {
+  const config = new AuthServiceConfig(
+    [
+      {
+        id: FacebookLoginProvider.PROVIDER_ID,
+        provider: new FacebookLoginProvider('267944493630743')
+      },
+      {
+        id: GoogleLoginProvider.PROVIDER_ID,
+        provider: new GoogleLoginProvider('679229929445-o4a1nfjehi6ita0s4c0dcrbudvocve7u.apps.googleusercontent.com')
+      }
+    ]);
+  return config;
+}
 
 @NgModule({
   declarations: [
@@ -34,12 +57,16 @@ import { AlertBoxComponent } from './alert-box/alert-box.component';
     AssignmentTopicComponent,
     ChartsComponent,
     AlertBoxComponent,
+    LoginComponent,
+    UpdatePasswordComponent,
+    UserTaskComponent
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
     LayoutModule,
+    SocialLoginModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -58,11 +85,16 @@ import { AlertBoxComponent } from './alert-box/alert-box.component';
     MatProgressSpinnerModule,
     MatSortModule,
     MatDialogModule,
+    MatMenuModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule
   ],
-  providers: [MainService],
+  providers: [MainService, AuthGuard, LoginService,
+    {
+      provide: AuthServiceConfig,
+      useFactory: getAuthServiceConfigs
+    }],
   bootstrap: [AppComponent],
   entryComponents: [AssignmentTopicComponent]
 })

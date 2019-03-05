@@ -41,25 +41,16 @@ const mv = require('mv');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    /* Files will be saved in the 'uploads' directory. Make
-       sure this directory already exists! */
     cb(null, './src/assets/uploads/userprofile');
     mkdirp('./src/assets/uploads/userprofile', function (err) {
       if (err) data["message"] = "Folder is not creating";
     });
   },
   filename: (req, file, cb) => {
-    /* uuidv4() will generate a random ID that we'll use for the
-      new filename. We use path.extname() to get
-      the extension from the original file name and add that to the new
-      generated ID. These combined will create the file name used
-      to save the file on the server and will be available as
-      req.file.pathname in the router handler. */
     const newFilename = `${uuidv4()}${path.extname(file.originalname)}`;
     cb(null, newFilename);
   },
 });
-// create the multer instance that will be used to upload/save the file
 const upload = multer({
   storage
 }).array('image', 1);
@@ -121,6 +112,25 @@ app.get('/api/getUsers', (req, res, next) => {
   })
 });
 
+app.get('/api/getAllTasks', (req, res, next) => {
+  assignedTasks.find({}, (err, allTasks) => {
+    if (err) return next(err);
+    data['data'] = allTasks;
+    data['status'] = "OK";
+    res.json(data);
+  });
+});
+
+app.get('/api/getUserTasks/:id', (req, res, next) => {
+  const userId = req.params.id;
+  assignedTasks.find({ "ref_id": userId }, (err, userTasks) => {
+    if (err) return next(err);
+    data['data'] = userTasks;
+    data['status'] = "OK";
+    res.json(data);
+  });
+});
+
 
 /* -------- get User Data --------- */
 app.get('/api/getUserDetails/:id', (req, res, next) => {
@@ -129,7 +139,6 @@ app.get('/api/getUserDetails/:id', (req, res, next) => {
     "_id": userId
   }, function (err, userData) {
     if (err) return next(err);
-
     userPhotos.find({
       'ref_id': userId,
       'imageactive': true
@@ -137,7 +146,7 @@ app.get('/api/getUserDetails/:id', (req, res, next) => {
       if (result.length > 0) {
         let profileImg = result[0].imagepath;
       } else {
-        profileImg = '' ;
+        profileImg = '';
       }
       userData[0].profileimage = profileImg;
       data['data'] = userData;
@@ -203,6 +212,18 @@ app.get('/api/getAllTopics', (req, res, next) => {
   });
 });
 
+/* ---------------- get Topic Information ---------- */
+
+app.get('/api/getTopicDetails/:id', (req, res, next) => {
+  const taskId = req.params.id;
+  assignmentTopics.find({ "_id": taskId }, (err, task) => {
+    if (err) return next(err);
+    data['data'] = task;
+    data['status'] = "OK";
+    res.json(data);
+  });
+});
+
 /*---------- submit task to user -------------- */
 app.post('/api/submitTask', (req, res, next) => {
   const taskData = req.body;
@@ -213,6 +234,106 @@ app.post('/api/submitTask', (req, res, next) => {
     res.json(data);
   });
 });
+
+/*---------- normal login  -------------- */
+app.post('/api/login', (req, res, next) => {
+  const loginData = req.body;
+  const userEmailMobile = loginData.mobile_email;
+  const userPassword = loginData.password;
+  const userCurrentLoginTime = loginData.last_login;
+  user.find({
+    $or: [{
+      "mobilenumber": userEmailMobile
+    }, {
+      "email": userEmailMobile
+    }]
+  },
+    function (err, getData) {
+      if (err) return next(err);
+      if (getData.length > 0) {
+        const getPassword = getData[0].password;
+        data['status'] = "ERR";
+        if (getPassword !== 'NULL' && getPassword !== '') {
+          if (getData[0].password === userPassword) {
+            const _id = getData[0]._id;
+            user.update({ _id: _id }, {
+              $set: {
+                "last_login": userCurrentLoginTime,
+                "userLog": 1
+              }
+            })
+            data['status'] = "OK";
+            data['message'] = "MATCHED";
+            data['data'] = getData;
+          } else {
+            data['message'] = "NOTMATCHED";
+          }
+        } else {
+          data['message'] = "PWDEMPTY";
+        }
+      } else {
+        data['message'] = "NOTAVAIL";
+      }
+      res.json(data);
+    });
+});
+
+/*----------- Update Password ----------------*/
+app.post('/api/updatePassword', (req, res, next) => {
+  const formData = req.body;
+  const userEmailMobile = formData.mobile_email;
+  const userPassword = formData.new_password;
+  user.find({
+    $or: [{
+      "mobilenumber": userEmailMobile
+    }, {
+      "email": userEmailMobile
+    }]
+  },
+    function (err, userRow) {
+      if (userRow.length != 0) {
+        const user_id = userRow[0]._id;
+        user.update({ _id: user_id }, {
+          $set: {
+            "password": userPassword,
+          }
+        }, function (err, result) {
+          if (err) return next(err);
+          data['message'] = "Successfully password is updated";
+          data['status'] = "OK";
+          data['data'] = result;
+        });
+
+      } else {
+        data['message'] = "Mobile or Email is not present.";
+        data['status'] = "ERR";
+      }
+      res.json(data);
+    });
+});
+
+
+/*--------------- user login via social ----------------- */
+app.post('/api/socialLogin', (req, res, next) => {
+  const formData = req.body;
+  user.find({
+    'email': formData.email,
+  }, function (err, result) {
+    if (err) return next(err);
+    if (result.length != 0) {
+      data['status'] = 'OK';
+      data['message'] = 'Loggedin Successfully';
+      data['data'] = result;
+    } else {
+      data['status'] = 'ERR';
+      data['message'] = "Email doesn't exsit.";
+    }
+    res.json(data);
+  });
+});
+
+
+
 
 app.get('/api/test', (req, res, next) => {
   data['data'] = "testdata";

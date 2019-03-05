@@ -6,3 +6,20 @@
   width: 200px;
   box-shadow: 3px 0 6px rgba(0,0,0,.24);
 }
+
+.right-nav {
+  width:auto;
+  font-size:16px;
+  position: absolute;
+  right:40px;
+  text-decoration:none;
+}
+.right-nav span {
+  display:inline-block;
+  padding:0px 20px;
+  color:#fff !important;
+}
+
+.right-nav span a{
+  color:#fff !important;
+}

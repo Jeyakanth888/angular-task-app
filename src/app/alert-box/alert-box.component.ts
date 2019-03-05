@@ -11,7 +11,7 @@ export class AlertBoxComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-  
+
   }
 
 }
