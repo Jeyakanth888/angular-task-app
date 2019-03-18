@@ -8,6 +8,7 @@ const user = db.users;
 const userPhotos = db.usersprofileimages;
 const assignmentTopics = db.assignment_topics;
 const assignedTasks = db.assigned_tasks;
+const taskDocuments = db.tasks_documentation;
 
 app.use(bodyParser.json({
   limit: '50mb',
@@ -41,19 +42,30 @@ const mv = require('mv');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, './src/assets/uploads/userprofile');
-    mkdirp('./src/assets/uploads/userprofile', function (err) {
-      if (err) data["message"] = "Folder is not creating";
-    });
+    const actionUrl = req.originalUrl;
+    if (actionUrl === '/api/uploadTaskDocument') {
+      cb(null, './src/assets/uploads/taskdocuments');
+      mkdirp('./src/assets/uploads/taskdocuments', function (err) {
+        if (err) data["message"] = "Folder is not creating";
+      });
+    } else {
+      cb(null, './src/assets/uploads/userprofile');
+      mkdirp('./src/assets/uploads/userprofile', function (err) {
+        if (err) data["message"] = "Folder is not creating";
+      });
+    }
+
   },
   filename: (req, file, cb) => {
     const newFilename = `${uuidv4()}${path.extname(file.originalname)}`;
     cb(null, newFilename);
   },
 });
+
 const upload = multer({
   storage
 }).array('image', 1);
+
 
 /* -------- Check User Available or not based mobile and email --------- */
 async function checkUserAvail(mobile, email) {
@@ -72,7 +84,6 @@ async function checkUserAvail(mobile, email) {
       }
       resolve(returnVal);
     });
-
   });
 }
 
@@ -333,6 +344,32 @@ app.post('/api/socialLogin', (req, res, next) => {
 });
 
 
+/*--------- Task Submit Document -------------- */
+app.post('/api/uploadTaskDocument', (req, res, next) => {
+  upload(req, res, function (err) {
+    const userId = req.body.ref_id;
+    const taskId = req.body.t_id;
+    const uploadedFiles = req.files;
+    const filesData = uploadedFiles[0];
+    const fileData = {
+      'ref_id': userId,
+      't_id': taskId,
+      'doc_path': filesData.path,
+      'doc_size': filesData.size,
+      'doc_type': filesData.mimetype,
+      'doc_active': true,
+      'created_at': new Date()
+    };
+     taskDocuments.create(fileData, function (err, response) {
+        if (err) return next(err);
+        data['data'] = uploadedFiles;
+        data['status'] = "OK";
+        data['message'] = "Document Successfully Submitted";
+        res.json(data);
+      });
+  });
+
+})
 
 
 app.get('/api/test', (req, res, next) => {
