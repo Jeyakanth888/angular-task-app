@@ -15,7 +15,7 @@ export class UserTaskComponent implements OnInit {
   topicDescription: String;
   loggedUserName: String;
   taskFile: String;
-  isEmptyFile: Boolean = false;
+  isFileUploaded: Boolean = false;
   userId: String;
   taskId: String;
   apiResponseStatus: Object = { message: '', status: '' };
@@ -28,11 +28,25 @@ export class UserTaskComponent implements OnInit {
 
   getUserTaskData() {
     this.loggedUserName = localStorage.getItem('userName');
+    const loggedUserRole = localStorage.getItem('userRole');
     this.userId = this.route.snapshot.queryParams.uID;
     this.taskId = this.route.snapshot.queryParams.tID;
-    const tasksData = JSON.parse(localStorage.getItem('usersTasksDetails'));
-    const getTask = tasksData.filter(task => task['t_id'] === this.taskId && task['ref_id'] === this.userId);
-    this.currentTask = getTask[0];
+    let tasksData, getTask = [];
+    if (loggedUserRole === 'user') {
+      this.repositoryService.getUserAllTasks(this.userId).subscribe(response => {
+        if (response['status'] === 'OK') {
+          tasksData = response['data'];
+          getTask = tasksData.filter(task => task['t_id'] === this.taskId && task['ref_id'] === this.userId);
+          this.currentTask = getTask[0];
+        }
+      });
+    } else {
+      tasksData = JSON.parse(localStorage.getItem('usersTasksDetails'));
+      getTask = tasksData.filter(task => task['t_id'] === this.taskId && task['ref_id'] === this.userId);
+      this.currentTask = getTask[0];
+    }
+
+
     this.repositoryService.getTopicInfo(this.taskId).subscribe(response => {
       if (response['status'] === 'OK') {
         const resData = response['data'];
@@ -40,6 +54,15 @@ export class UserTaskComponent implements OnInit {
         this.topicDescription = resData[0].topic_description;
       }
     });
+
+    this.repositoryService.getUserTaskDocuments(this.userId, this.taskId).subscribe(resp => {
+      if (resp['status'] === 'OK') {
+        this.isFileUploaded = true;
+      } else {
+        this.isFileUploaded = false;
+      }
+    });
+
   }
 
   submitTaskCompletion(fileInput: any) {
@@ -48,10 +71,10 @@ export class UserTaskComponent implements OnInit {
       return;
     }
     const file: File = fileInput.files[0];
-    let statusType ;
-    let resMessage ;
+    let statusType;
+    let resMessage;
     this.repositoryService.uploadTaskFile(file, this.userId, this.taskId).subscribe(
-      (res) => {
+      res => {
         if (res['status'] === 'OK') {
           statusType = 'SUCCESS';
         } else {
@@ -63,7 +86,7 @@ export class UserTaskComponent implements OnInit {
         statusType = 'ERROR';
         resMessage = 'Server Issue try again later';
       });
-      this.showAlertBoxMessage(resMessage,statusType);
+    this.showAlertBoxMessage(resMessage, statusType);
   }
 
   showAlertBoxMessage(msg, alertStatus) {

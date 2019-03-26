@@ -5,6 +5,8 @@ var taskSchema = new mongoose.Schema({
     created_at:Date,
     task_date:Date,
     completed_status:Number,
-    completed_at:Date
+    completed_at:Date,
+    approved_status:Number,
+    approved_rejected_at:Date
 });
 module.exports = mongoose.model('assigned_tasks', taskSchema);

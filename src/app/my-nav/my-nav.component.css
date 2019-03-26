@@ -23,3 +23,7 @@
 .right-nav span a{
   color:#fff !important;
 }
+
+a.btn-logout {
+  cursor:pointer;
+}

@@ -142,7 +142,9 @@ export class TaskAssignmentComponent implements OnInit {
       task_date: taskFormValues.assignDate,
       created_at: curDate,
       completed_status: 0,
-      completed_at: curDate
+      completed_at: curDate,
+      approved_status: 0,
+      approved_rejected_at: curDate
     };
 
     this.repositoryService.submitTaskAssignment(taskAssignmentInfo)

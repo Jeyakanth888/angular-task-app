@@ -29,6 +29,7 @@ import { UpdatePasswordComponent } from './update-password/update-password.compo
 import { AuthGuard } from './services/auth.guard';
 import { LoginService } from './services/login.service';
 import { UserTaskComponent } from './user-task/user-task.component';
+import { ViewUserTaskComponent } from './view-user-task/view-user-task.component';
 
 // Configs
 export function getAuthServiceConfigs() {
@@ -59,7 +60,8 @@ export function getAuthServiceConfigs() {
     AlertBoxComponent,
     LoginComponent,
     UpdatePasswordComponent,
-    UserTaskComponent
+    UserTaskComponent,
+    ViewUserTaskComponent
   ],
   imports: [
     HttpClientModule,

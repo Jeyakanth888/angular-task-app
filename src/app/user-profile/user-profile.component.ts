@@ -9,6 +9,18 @@ class ImageSnippet {
   status = 'init';
   constructor(public src: string, public file: File) { }
 }
+
+export interface PeriodicElement {
+  taskname: String;
+  assigneddate: Date;
+  taskdate: Date;
+  submitteddate: Date;
+  u_id: String,
+  t_id: String
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [];
+
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -27,15 +39,25 @@ export class UserProfileComponent implements OnInit {
   rejectedCount: Number;
   holdCount: Number;
   taskPercentage: Number;
+  submittedTaskAvailable: Boolean = false;
+  displayedColumns: string[] = ['taskname', 'assigneddate', 'taskdate', 'submitteddate', 'view'];
+  dataSource: any[];
+  allUsersTasks: any[];
+  allTaskTopics: any[];
 
   constructor(private route: ActivatedRoute, private repositoryService: MainService) { }
 
   ngOnInit() {
+    this.userId = this.route.snapshot.paramMap.get('id');
+    this.allUsersTasks = JSON.parse(localStorage.getItem('usersTasksDetails'));
     this.loadUserData();
     this.findTaskCounts();
+    this.getAllTaskTopics();
+    this.getUserSubmittedTasks();
+
   }
+
   loadUserData(): void {
-    this.userId = this.route.snapshot.paramMap.get('id');
     this.repositoryService.getUserDetails(this.userId).subscribe(respData => {
       if (respData['status'] === 'OK') {
         this.response = respData;
@@ -79,11 +101,56 @@ export class UserProfileComponent implements OnInit {
     const allUserTasks = JSON.parse(localStorage.getItem('usersTasksDetails'));
     const getTasks = allUserTasks.filter(usersTask => usersTask['ref_id'] === this.userId);
     this.totalCount = getTasks.length;
-    this.pendingCount = getTasks.filter(task => task['completed_status'] === 0).length;
-    this.completedCount = getTasks.filter(task => task['completed_status'] === 1).length;
-    this.rejectedCount = getTasks.filter(task => task['completed_status'] === 2).length;
-    this.holdCount = getTasks.filter(task => task['completed_status'] === 3).length;
+    this.pendingCount = getTasks.filter(task => task['approved_status'] === 0).length;
+    this.completedCount = getTasks.filter(task => task['approved_status'] === 1).length;
+    this.rejectedCount = getTasks.filter(task => task['approved_status'] === 2).length;
+    this.holdCount = getTasks.filter(task => task['approved_status'] === 3).length;
     this.taskPercentage = this.completedCount / this.totalCount * 100;
+  }
+
+  getUserSubmittedTasks() {
+    this.repositoryService.getUserSubmittedTaskDetails(this.userId).subscribe(respData => {
+      if (respData['status'] === 'OK') {
+        this.submittedTaskAvailable = true;
+        const taskDocDatas = respData['data'];
+        let dataArr = [];
+        taskDocDatas.map((data) => {
+          const taskId = data.t_id;
+          const dataObj: Object = {
+            't_id': taskId, 'u_id': this.userId,
+            'taskname': this.findTaskName(taskId), 'taskdate': this.findUserTaskDates(taskId, 'taskdate'),
+            'assigneddate': this.findUserTaskDates(taskId, 'created'), 'submitteddate': data.created_at
+          };
+          dataArr.push(dataObj);
+        });
+        this.dataSource = dataArr;
+        console.log(this.dataSource);
+      }
+    });
+  }
+
+  getAllTaskTopics() {
+    this.repositoryService.getTopics().subscribe(respData => {
+      const datas = respData['data'];
+      const respStatus = respData['status'];
+      if (respStatus === 'OK') {
+        this.allTaskTopics = datas;
+      }
+    });
+  }
+
+  findTaskName(tId) {
+    const filterData = this.allTaskTopics.filter(task => task['_id'] === tId);
+    return filterData[0].topic_name;
+  }
+
+  findUserTaskDates(tId, dateType) {
+    const filterData = this.allUsersTasks.filter(userTask => userTask['t_id'] === tId && userTask['ref_id'] === this.userId);
+    if (dateType === 'created') {
+      return filterData[0].created_at;
+    } else {
+      return filterData[0].task_date;
+    }
   }
 
 }

@@ -6,6 +6,7 @@ var taskDocumentSchema = new mongoose.Schema({
     doc_path: String,
     doc_type:String,
     doc_size:Number,
-    doc_active:Boolean
+    doc_active:Boolean,
+    approved_status:Number
 });
 module.exports = mongoose.model('tasks_documentation', taskDocumentSchema);

@@ -14,4 +14,4 @@ exports.users = userModel;
 exports.usersprofileimages = userImageModel;
 exports.assignment_topics = newTopicModel;
 exports.assigned_tasks = taskModel ;
-exports.tasks_documentation =  taskDocumentModel;
+exports.tasks_documentations =  taskDocumentModel;

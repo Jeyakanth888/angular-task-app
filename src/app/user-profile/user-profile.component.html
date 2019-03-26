@@ -4,9 +4,10 @@
 <div class="row" style="height:500px;">
   <div class="col-md-9">
     <mat-card class="profile-card">
-      <img src="assets/images/Loader.gif" class="img-fluid loader-icon"  [ngClass]="showloader===false?'hide' : ''" />
-      <img [src]= "userProfileImage" class="img-fluid profile-icon"/>
-      <input type="file" accept="image/*" #photoUpload class="upload-photo" (click)="photoUpload.value = null" (change)="importUserPhoto(photoUpload)"/>
+      <img src="assets/images/Loader.gif" class="img-fluid loader-icon" [ngClass]="showloader===false?'hide' : ''" />
+      <img [src]="userProfileImage" class="img-fluid profile-icon" />
+      <input type="file" accept="image/*" #photoUpload class="upload-photo" (click)="photoUpload.value = null" (change)="importUserPhoto(photoUpload)"
+      />
       <button mat-button class="btn btn-default" id="add-photo-btn" (click)="photoUpload.click()">Add Photo</button>
       <h5>User Profile</h5>
       <hr>
@@ -45,6 +46,7 @@
         </p>
       </div>
     </mat-card>
+
   </div>
   <div class="col-md-3 cards">
     <mat-card class="task-percentage">
@@ -64,4 +66,43 @@
       <h6>{{pendingCount}}</h6>
     </mat-card>
   </div>
+</div>
+
+<div class="row" *ngIf="submittedTaskAvailable">
+  <p>Submitted Tasks</p>
+  <mat-table [dataSource]="dataSource" class="submitted-task-table">
+    <!-- Position Column -->
+    <ng-container matColumnDef="taskname">
+      <mat-header-cell *matHeaderCellDef> Task </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.taskname}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="assigneddate">
+      <mat-header-cell *matHeaderCellDef> Assigned Date </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.assigneddate | date:'MMM d, y'}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="taskdate">
+      <mat-header-cell *matHeaderCellDef> Task Date </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.taskdate | date:'MMM d, y'}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="submitteddate">
+      <mat-header-cell *matHeaderCellDef> Submitted Date </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.submitteddate | date:'MMM d, y'}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="view">
+      <mat-header-cell *matHeaderCellDef> View Doc</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <a routerLink="/viewusertask/{{element.u_id}}/{{element.t_id}}">
+          <button mat-button class="btn btn-info">
+            <i class="fa fa-eye" aria-hidden="true"></i>
+          </button>
+        </a>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
 </div>

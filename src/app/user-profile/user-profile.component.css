@@ -78,3 +78,13 @@ input.upload-photo{
 .loader-icon.hide{
   opacity:0;
 }
+
+.row {
+    margin: 0 !important;
+}
+
+.submitted-task-table {
+    width:95%;
+    margin:0px 10px;
+    margin-bottom:50px;
+}

@@ -19,11 +19,12 @@
       <h6>Task Completed Time</h6>
       <p>{{currentTask.completed_at | date:'medium' }}</p>
     </mat-card-content>
-    <mat-card-actions *ngIf="currentTask.completed_status == 0">
-      <h6> Submit your Task</h6>
-      <form  autocomplete="off" >
+    <mat-card-actions *ngIf="!isFileUploaded">
+      <h6> Submit your Task </h6>
+      <form autocomplete="off">
         <div class="row col-md-10 offset-2 form-div">
-          <input type="file" required name="taskFile"  #fileUpload [(ngModel)] = "taskFile" accept="application/msword, application/pdf" />
+          <input type="file" required name="taskFile" #fileUpload [(ngModel)]="taskFile" accept="application/msword, application/pdf"
+          />
           <span>Select word, pdf document.</span>
           <button mat-button class="btn btn-primary" type="button" (click)="submitTaskCompletion(fileUpload)">Submit</button>
         </div>

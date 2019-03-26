@@ -1,0 +1,21 @@
+<div class="row btns-row md-offset-2 col-md-10">
+  <div class="col-md-4">
+    <button mat-raised-button color="primary" (click)="backPreviousPage()">
+      <i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button>
+  </div>
+  <div class="col-md-4">
+    <button class="btn btn-success" mat-raised-button type="button" (click)="updateUserTaskAction('approve')">
+      <i class="fa fa-thumbs-up" aria-hidden="true"></i> Approve</button>
+  </div>
+  <div class="col-md-4">
+    <button class=" btn btn-danger" mat-raised-button type="button" (click)="updateUserTaskAction('reject')">
+      <i class="fa fa-thumbs-down" aria-hidden="true"></i> Reject</button>
+  </div>
+  <div class="col-md-12 alert-box">
+    <app-alert-box *ngIf="showAlertBox" [msgInfo]="apiResponseStatus" ></app-alert-box>
+  </div>
+</div>
+<div class="row doc-row">
+  <iframe src="https://docs.google.com/viewer?url=http://infolab.stanford.edu/pub/papers/google.pdf&embedded=true" style="width:600px; height:500px;"
+    frameborder="0"></iframe>
+</div>

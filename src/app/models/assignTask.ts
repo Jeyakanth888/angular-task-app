@@ -5,4 +5,6 @@ export class AssignTask {
     task_date: Date;
     completed_status:Number;
     completed_at:Date;
+    approved_status:Number;
+    approved_rejected_at:Date;
 }

@@ -8,7 +8,7 @@ const user = db.users;
 const userPhotos = db.usersprofileimages;
 const assignmentTopics = db.assignment_topics;
 const assignedTasks = db.assigned_tasks;
-const taskDocuments = db.tasks_documentation;
+const taskDocuments = db.tasks_documentations;
 
 app.use(bodyParser.json({
   limit: '50mb',
@@ -154,8 +154,9 @@ app.get('/api/getUserDetails/:id', (req, res, next) => {
       'ref_id': userId,
       'imageactive': true
     }, function (err, result) {
+      let profileImg;
       if (result.length > 0) {
-        let profileImg = result[0].imagepath;
+        profileImg = result[0].imagepath;
       } else {
         profileImg = '';
       }
@@ -358,18 +359,123 @@ app.post('/api/uploadTaskDocument', (req, res, next) => {
       'doc_size': filesData.size,
       'doc_type': filesData.mimetype,
       'doc_active': true,
-      'created_at': new Date()
+      'created_at': new Date(),
+      'approved_status': 0
     };
-     taskDocuments.create(fileData, function (err, response) {
-        if (err) return next(err);
-        data['data'] = uploadedFiles;
-        data['status'] = "OK";
-        data['message'] = "Document Successfully Submitted";
-        res.json(data);
-      });
+    taskDocuments.create(fileData, function (err, response) {
+      if (err) return next(err);
+      assignedTasks.update({
+        'ref_id': userId,
+        't_id': taskId
+      }, {
+          $set: {
+            'completed_status': 1,
+            'completed_at': new Date()
+          }
+        }, {
+          w: 1
+        }, function (err, result) {
+          if (err) return next(err);
+          data['data'] = uploadedFiles;
+          data['status'] = "OK";
+          data['message'] = "Document Successfully Submitted";
+          res.json(data);
+        });
+    });
   });
+});
 
-})
+
+/*--------- Check Task Document -------------- */
+app.post('/api/getUserTaskDocumentUpdated/:ref_id/:t_id', (req, res, next) => {
+  const userId = req.params.ref_id;
+  const taskId = req.params.t_id;
+  taskDocuments.find({
+    $and: [{
+      "ref_id": userId
+    }, {
+      "t_id": taskId
+    }]
+  },
+    function (err, taskDocumentRow) {
+      if (err) return next(err);
+      if (taskDocumentRow.length > 0) {
+        data['data'] = taskDocumentRow;
+        data['status'] = "OK";
+        data['message'] = "Document is available";
+      }
+      else {
+        data['data'] = '';
+        data['status'] = "ERR";
+        data['message'] = "Document is not available";
+      }
+      res.json(data);
+    });
+});
+
+/*----------- get user submitted tasks -----------*/
+app.get('/api/getUserSubmittedTasks/:id', (req, res, next) => {
+  const userId = req.params.id;
+  taskDocuments.find({
+    $and: [{
+      "ref_id": userId
+    }, {
+      "approved_status": 0
+    },
+    {
+      "doc_active": true
+    }]
+  },
+    function (err, taskDocumentsRow) {
+      if (taskDocumentsRow.length > 0) {
+        data['data'] = taskDocumentsRow;
+        data['status'] = "OK";
+        data['message'] = "Submitted Tasks are available";
+      }
+      else {
+        data['data'] = '';
+        data['status'] = "ERR";
+        data['message'] = "Submitted Task is not available";
+      }
+      res.json(data);
+    });
+});
+
+/*---------- update task by admin ----------*/
+app.post('/api/updateUserTask', (req, res, next) => {
+  const userId = req.body.uId;
+  const taskId = req.body.tId;
+  const status = req.body.status;
+  assignedTasks.update({
+    'ref_id': userId,
+    't_id': taskId
+  }, {
+      $set: {
+        'approved_status': status,
+        'approved_rejected_at': new Date()
+      }
+    }, {
+      w: 1
+    }, function (err, result) {
+      taskDocuments.update({
+        'ref_id': userId,
+        't_id': taskId
+      }, {
+          $set: {
+            'approved_status': status,
+          }
+        }, {
+          w: 1
+        }, function (err, result) {
+          data['data'] = result;
+          data['status'] = "OK";
+          const updatedStatus = status === 1 ? 'approved' : 'Rejected'
+          data['message'] = "This task is " + updatedStatus;
+          res.json(data);
+        });
+    });
+
+});
 
 
 app.get('/api/test', (req, res, next) => {
