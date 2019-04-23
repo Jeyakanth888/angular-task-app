@@ -1,18 +1,22 @@
-<div class="row btns-row md-offset-2 col-md-10">
-  <div class="col-md-4">
+<div class="row btns-row md-offset-2 col-md-10" *ngIf="loggedInUserRole!=='user'"  #btnsRow [ngClass]="currentDocumentDetails.approved_status !='0'?'disabled-btns':'' ">
+  <div class="col-md-3">
     <button mat-raised-button color="primary" (click)="backPreviousPage()">
       <i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3 btn-actions">
     <button class="btn btn-success" mat-raised-button type="button" (click)="updateUserTaskAction('approve')">
       <i class="fa fa-thumbs-up" aria-hidden="true"></i> Approve</button>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3 btn-actions">
     <button class=" btn btn-danger" mat-raised-button type="button" (click)="updateUserTaskAction('reject')">
       <i class="fa fa-thumbs-down" aria-hidden="true"></i> Reject</button>
   </div>
+  <div class="col-md-3">
+    <button class=" btn btn-info" mat-raised-button type="button" (click)="resetActionBtns()">
+      <i class="fa fa-undo" aria-hidden="true"></i> Reset</button>
+  </div>
   <div class="col-md-12 alert-box">
-    <app-alert-box *ngIf="showAlertBox" [msgInfo]="apiResponseStatus" ></app-alert-box>
+    <app-alert-box *ngIf="showAlertBox" [msgInfo]="apiResponseStatus"></app-alert-box>
   </div>
 </div>
 <div class="row doc-row">

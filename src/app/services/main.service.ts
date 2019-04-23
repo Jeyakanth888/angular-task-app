@@ -79,7 +79,8 @@ export class MainService {
     const formData = new FormData();
     formData.append('ref_id', uid);
     formData.append('t_id', tid);
-    return this.http.post<Response[]>(`http://localhost:4000/api/getUserTaskDocumentUpdated/${uid}/${tid}`, formData).pipe(map(response => response));
+    return this.http.post<Response[]>(`http://localhost:4000/api/getUserTaskDocumentUpdated/${uid}/${tid}`, formData)
+      .pipe(map(response => response));
   }
 
   uploadTaskFile(taskfile: File, userid, taskid): Observable<Response[]> {
@@ -95,7 +96,8 @@ export class MainService {
   }
 
   updateTaskAction(values): Observable<Response[]> {
-    return this.http.post<Response[]>('http://localhost:4000/api/updateUserTask', JSON.stringify(values), httpOptions).pipe(map(response => response));
+    return this.http.post<Response[]>('http://localhost:4000/api/updateUserTask', JSON.stringify(values), httpOptions)
+      .pipe(map(response => response));
   }
 }
 

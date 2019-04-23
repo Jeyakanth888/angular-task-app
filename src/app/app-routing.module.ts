@@ -20,7 +20,8 @@ const appRoutes: Routes = [
   { path: 'updatepassword', component: UpdatePasswordComponent },
   { path: '', component: LoginComponent},
   { path: 'viewtask', component: UserTaskComponent, canActivate: [AuthGuard] },
-  { path: 'viewusertask/:uid/:tid', component: ViewUserTaskComponent, canActivate: [AuthGuard]}
+  { path: 'viewusertask/:uid/:tid', component: ViewUserTaskComponent, canActivate: [AuthGuard]},
+  { path: 'profile/:id', component: UserProfileComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

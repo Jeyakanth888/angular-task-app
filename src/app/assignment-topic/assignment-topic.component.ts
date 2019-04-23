@@ -17,7 +17,7 @@ export class AssignmentTopicComponent implements OnInit {
   @Output() newTopicAdded = new EventEmitter();
   @ViewChild('alertMessageBox') alertBox: ElementRef;
 
-  constructor(private repositoryService: MainService, addTopicDialogRef: MatDialogRef<AssignmentTopicComponent>) { }
+  constructor(private repositoryService: MainService, private addTopicDialogRef: MatDialogRef<AssignmentTopicComponent>) { }
 
   public ngOnInit(): void {
     this.topicForm = new FormGroup({
@@ -66,7 +66,7 @@ export class AssignmentTopicComponent implements OnInit {
         }
         setTimeout(() => {
           this.showAlertBox = false;
-          // this.addTopicDialogRef.close();
+          this.addTopicDialogRef.close();
         }, 2000);
       });
   }

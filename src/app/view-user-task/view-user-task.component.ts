@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { MainService } from '../services/main.service';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -8,16 +8,20 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './view-user-task.component.html',
   styleUrls: ['./view-user-task.component.css']
 })
-export class ViewUserTaskComponent implements OnInit {
 
+
+export class ViewUserTaskComponent implements OnInit {
+  loggedInUserRole: String;
   viewingUserId: String;
   viewingUserTaskId: String;
   apiResponseStatus: Object = { message: '', status: '' };
   showAlertBox: Boolean = false;
-  currentDocumentDetails : any[];
+  currentDocumentDetails:  {'approved_status': 0};
+  @ViewChild('btnsRow') btnsRow: ElementRef;
   constructor(private repositoryService: MainService, private _location: Location, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.loggedInUserRole  = localStorage.getItem('userRole');
     this.viewingUserId = this.route.snapshot.url[1].path;
     this.viewingUserTaskId = this.route.snapshot.url[2].path;
     this.loadUserTaskDoc();
@@ -27,8 +31,8 @@ export class ViewUserTaskComponent implements OnInit {
     this.repositoryService.getUserTaskDocuments(this.viewingUserId, this.viewingUserTaskId).subscribe(resp => {
       if (resp['status'] === 'OK') {
        this.currentDocumentDetails = resp['data'][0];
-       console.log(this.currentDocumentDetails);
-      } 
+
+      }
     });
   }
 
@@ -38,6 +42,8 @@ export class ViewUserTaskComponent implements OnInit {
       let statusType;
       if (resp['status'] === 'OK') {
         statusType = status === 'approve' ? 'SUCCESS' : 'ERROR';
+        this.btnsRow.nativeElement.classList.add('disabled-btns');
+
       } else {
         statusType = 'ERROR';
       }
@@ -62,4 +68,7 @@ export class ViewUserTaskComponent implements OnInit {
     this._location.back();
   }
 
+  resetActionBtns() {
+    this.btnsRow.nativeElement.classList.remove('disabled-btns');
+  }
 }

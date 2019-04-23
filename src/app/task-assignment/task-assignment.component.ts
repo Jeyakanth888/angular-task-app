@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { MainService } from '../services/main.service';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { AssignmentTopicComponent } from '../assignment-topic/assignment-topic.component';
@@ -10,7 +10,7 @@ import { AssignTask } from '../models/assignTask';
   templateUrl: './task-assignment.component.html',
   styleUrls: ['./task-assignment.component.css']
 })
-export class TaskAssignmentComponent implements OnInit {
+export class TaskAssignmentComponent implements OnInit, AfterViewInit {
   public taskForm: FormGroup;
   apiResponseStatus: Object = { message: '', status: '' };
   showAlertBox: Boolean = false;
@@ -18,21 +18,30 @@ export class TaskAssignmentComponent implements OnInit {
   topics: any[];
   selectedTopicDescription: String = '';
   addTopicDialogRef: MatDialogRef<AssignmentTopicComponent>;
-  minDate = new Date();
-  dateFilter = (date: Date) => date.getMonth() - 1 && date.getDate() - 1;
-  selectedUser: string;
-  selectedTopic: any;
-  disableSubmitTask: Boolean = false;
+  minDate: Date;
+  maxDate: Date;
+
+  public selectedUser: string;
+  public selectedTopic: any;
+  public disableSubmitTask: Boolean = false;
 
   constructor(private repositoryService: MainService, private addTopicDialog: MatDialog) { }
 
   ngOnInit() {
+
     this.taskForm = new FormGroup({
       assignUser: new FormControl('', [Validators.required]),
       assignTopic: new FormControl('', [Validators.required]),
       assignDate: new FormControl('', [Validators.required])
     });
+
+
+    let d: Date = new Date();
+    this.minDate = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 2);
+    this.maxDate = new Date(d.getFullYear(), d.getMonth() + 1, d.getDate() - 15);
+
   }
+
 
   ngAfterViewInit() {
     this.getAllUsers();
@@ -152,6 +161,7 @@ export class TaskAssignmentComponent implements OnInit {
         let statusType;
         if (data['status'] === 'OK') {
           statusType = 'SUCCESS';
+          this.taskForm.reset(this.taskForm.value);
         } else {
           statusType = 'ERROR';
         }

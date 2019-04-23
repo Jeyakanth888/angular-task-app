@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
           const resData = response['data'][0];
           const loggedUserId = resData._id;
           const loggedUserRole = this.userRoles[resData.userRole];
-          const loggedUserName = resData.firstname + ' ' + resData.lastname
+          const loggedUserName = resData.firstname + ' ' + resData.lastname;
           this.setLocalStorageData(loggedUserId, loggedUserRole, loggedUserName);
         } else {
           this.apiResponseStatus['message'] = respMsg;
@@ -116,7 +116,7 @@ export class LoginComponent implements OnInit {
           const resData = response['data'][0];
           const loggedUserId = resData._id;
           const loggedUserRole = this.userRoles[resData.userRole];
-          const loggedUserName = resData.firstname + ' ' + resData.lastname
+          const loggedUserName = resData.firstname + ' ' + resData.lastname;
           this.setLocalStorageData(loggedUserId, loggedUserRole, loggedUserName);
         } else if (respStatus === 'ERR' && respMsg === 'NOTMATCHED') {
           this.apiResponseStatus['status'] = 'ERROR';

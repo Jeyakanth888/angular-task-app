@@ -6,6 +6,7 @@
       <a mat-list-item routerLink="/dashboard">Dashboard</a>
       <a mat-list-item routerLink="/registration" *ngIf="userRole!='user'">Registration</a>
       <a mat-list-item routerLink="/assigntask" *ngIf="userRole!='user'">Assign a Task</a>
+      <a mat-list-item routerLink="/profile/{{userId}}" *ngIf="userRole!='admin'">Profile </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -18,7 +19,7 @@
       <div class="right-nav">
         <span class="profile-name">{{loggedUserName}}</span>
         <span>
-          <a mat-list-item (click) = "logout()" class="btn-logout">
+          <a mat-list-item (click)="logout()" class="btn-logout">
             <i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
         </span>
       </div>

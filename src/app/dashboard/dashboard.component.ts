@@ -33,7 +33,8 @@ const ELEMENT_USER_DATA: PeriodicUserElement[] = [];
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  displayedAdminColumns: string[] = ['name', 'mobile', 'email', 'dob', 'role', 'total tasks', 'completed tasks', 'pending tasks', 'view', 'delete'];
+  displayedAdminColumns: string[] = ['name', 'mobile', 'email', 'dob', 'role', 'total tasks', 'completed tasks',
+    'pending tasks', 'view', 'delete'];
   displayedUserColumns: string[] = ['topicname', 'createdat', 'targetat', 'completedat', 'taskstatus', 'view'];
   dataSource: any[];
   users: ViewUser[] = [];
@@ -95,7 +96,6 @@ export class DashboardComponent implements OnInit {
     this.repositoryService.getAllUsersTasks().subscribe(response => {
       if (response['status'] === 'OK') {
         this.allTasks = response['data'];
-        localStorage.setItem('usersTasksDetails', JSON.stringify(this.allTasks));
         this.setSplitTasks();
       }
     });
@@ -106,7 +106,7 @@ export class DashboardComponent implements OnInit {
     const pendingCount = getTasks.filter(task => task['completed_status'] === 0).length;
     const completedCount = getTasks.filter(task => task['completed_status'] === 1).length;
     const tasksCountDetails: Object = { 'totalCount': getTasks.length, 'pendingCount': pendingCount, 'completedCount': completedCount };
-    return tasksCountDetails ;
+    return tasksCountDetails;
   }
 
   findTopicName(id) {
@@ -119,13 +119,14 @@ export class DashboardComponent implements OnInit {
       if (response['status'] === 'OK') {
         this.allTasks = response['data'];
         const taskArr = [];
+        localStorage.setItem('usersTasksDetails', JSON.stringify(this.allTasks));
         this.allTasks.map((taskInfo) => {
           const topic_name = this.findTopicName(taskInfo.t_id);
           const taskObj: Object = {
             '_id': taskInfo._id, 'topic_name': topic_name, 'created_at': taskInfo.created_at,
             'target_at': taskInfo.task_date, 'completed_at': taskInfo.completed_at, 'task_status': taskInfo.completed_status,
             't_id': taskInfo.t_id, 'ref_id': taskInfo.ref_id
-          }
+          };
           taskArr.push(taskObj);
         });
         this.dataSource = taskArr;
@@ -143,7 +144,7 @@ export class DashboardComponent implements OnInit {
 
   viewMyTask(taskId) {
     const userLoggedInId = localStorage.getItem('userLoggedIn');
-    this.router.navigate(['viewtask'],{queryParams :{'uID':userLoggedInId, 'tID':taskId}});
+    this.router.navigate(['viewtask'], { queryParams: { 'uID': userLoggedInId, 'tID': taskId } });
   }
   onRowClicked(row) {
     console.log('Row clicked: ', row);

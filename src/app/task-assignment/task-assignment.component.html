@@ -8,7 +8,7 @@
           <mat-form-field>
             <mat-select placeholder="Select User" required formControlName="assignUser" [(ngModel)]="selectedUser" (selectionChange)="onSelectUser($event)">
               <mat-option value="">Select</mat-option>
-              <mat-option *ngFor='let user of users ;let i =index' value="{{user._id}}">{{user.name}}</mat-option>
+              <mat-option *ngFor='let user of users ; ' value="{{user._id }}">{{user.name}}</mat-option>
             </mat-select>
             <mat-error *ngIf="hasError('assignUser', 'required')">Please Select User</mat-error>
           </mat-form-field>
@@ -24,7 +24,7 @@
         </div>
         <div class="col-md-6 form-fields">
           <mat-form-field>
-            <input matInput [matDatepicker]="picker" minDate="-1m" maxDate="+1m" placeholder="Select Date" required formControlName="assignDate">
+            <input matInput [matDatepicker]="picker"  [min]="minDate" [max]="maxDate" placeholder="Select Date" required formControlName="assignDate">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="hasError('assignDate', 'required')">Please Select Date</mat-error>
@@ -32,7 +32,7 @@
         </div>
         <div class="col-md-6 form-fields">
           <mat-form-field>
-            <textarea matInput placeholder="Description" disabled>{{selectedTopicDescription}}</textarea>
+            <textarea matInput placeholder="Description"  [value]="selectedTopicDescription" disabled></textarea>
           </mat-form-field>
         </div>
 

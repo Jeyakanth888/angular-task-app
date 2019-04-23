@@ -31,6 +31,7 @@ import { LoginService } from './services/login.service';
 import { UserTaskComponent } from './user-task/user-task.component';
 import { ViewUserTaskComponent } from './view-user-task/view-user-task.component';
 
+
 // Configs
 export function getAuthServiceConfigs() {
   const config = new AuthServiceConfig(
@@ -61,7 +62,7 @@ export function getAuthServiceConfigs() {
     LoginComponent,
     UpdatePasswordComponent,
     UserTaskComponent,
-    ViewUserTaskComponent
+    ViewUserTaskComponent,
   ],
   imports: [
     HttpClientModule,

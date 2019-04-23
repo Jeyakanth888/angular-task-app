@@ -15,8 +15,8 @@ export interface PeriodicElement {
   assigneddate: Date;
   taskdate: Date;
   submitteddate: Date;
-  u_id: String,
-  t_id: String
+  u_id: String;
+  t_id: String;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [];
@@ -28,6 +28,7 @@ const ELEMENT_DATA: PeriodicElement[] = [];
 })
 export class UserProfileComponent implements OnInit {
   private userId: string;
+  userRole: string;
   response: Response[];
   userData: ViewUser[];
   selectedFile: ImageSnippet;
@@ -49,6 +50,7 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit() {
     this.userId = this.route.snapshot.paramMap.get('id');
+    this.userRole = localStorage.getItem('userRole');
     this.allUsersTasks = JSON.parse(localStorage.getItem('usersTasksDetails'));
     this.loadUserData();
     this.findTaskCounts();
@@ -113,9 +115,11 @@ export class UserProfileComponent implements OnInit {
       if (respData['status'] === 'OK') {
         this.submittedTaskAvailable = true;
         const taskDocDatas = respData['data'];
-        let dataArr = [];
+        const dataArr = [];
+  
         taskDocDatas.map((data) => {
           const taskId = data.t_id;
+        
           const dataObj: Object = {
             't_id': taskId, 'u_id': this.userId,
             'taskname': this.findTaskName(taskId), 'taskdate': this.findUserTaskDates(taskId, 'taskdate'),
@@ -124,7 +128,6 @@ export class UserProfileComponent implements OnInit {
           dataArr.push(dataObj);
         });
         this.dataSource = dataArr;
-        console.log(this.dataSource);
       }
     });
   }
