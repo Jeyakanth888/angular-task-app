@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { UpdatePasswordComponent } from './update-password/update-password.component';
 import { UserTaskComponent } from './user-task/user-task.component';
 import { ViewUserTaskComponent } from './view-user-task/view-user-task.component';
+import { ExampleComponent } from './example/example.component';
 import { AuthGuard } from './services/auth.guard';
 
 const appRoutes: Routes = [
@@ -21,7 +22,8 @@ const appRoutes: Routes = [
   { path: '', component: LoginComponent},
   { path: 'viewtask', component: UserTaskComponent, canActivate: [AuthGuard] },
   { path: 'viewusertask/:uid/:tid', component: ViewUserTaskComponent, canActivate: [AuthGuard]},
-  { path: 'profile/:id', component: UserProfileComponent, canActivate: [AuthGuard]}
+  { path: 'profile/:id', component: UserProfileComponent, canActivate: [AuthGuard]},
+  { path: 'sample', component: ExampleComponent },
 ];
 
 @NgModule({

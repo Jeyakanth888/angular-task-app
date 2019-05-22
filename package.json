@@ -48,6 +48,7 @@
     "rxjs": "^6.4.0",
     "rxjs-compat": "^6.4.0",
     "server": "^1.0.18",
+    "table-dragger": "^1.0.2",
     "uuid": "^3.3.2",
     "zone.js": "^0.8.29"
   },

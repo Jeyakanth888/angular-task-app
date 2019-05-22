@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Injectable  } from '@angular/core';
 import { MainService } from '../services/main.service';
 import { User } from '../models/user';
 import { ViewUser } from '../models/view-user';
 import { Response } from '../apiresponse';
 import { Router } from '@angular/router';
+import * as Rx from "rxjs";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 export interface PeriodicAdminElement {
   name: string;
   mobile: number;
@@ -26,6 +29,9 @@ export interface PeriodicUserElement {
 
 const ELEMENT_ADMIN_DATA: PeriodicAdminElement[] = [];
 const ELEMENT_USER_DATA: PeriodicUserElement[] = [];
+const subject = new Rx.AsyncSubject();
+
+
 
 @Component({
   selector: 'app-dashboard',
@@ -45,6 +51,7 @@ export class DashboardComponent implements OnInit {
   completedTasks: any[] = [];
   rejectedTasks: any[] = [];
   allTaskTopics: any[];
+  @Output() userNewTasksCount = new EventEmitter();
 
   constructor(private repositoryService: MainService, private router: Router) { }
 
@@ -96,6 +103,7 @@ export class DashboardComponent implements OnInit {
     this.repositoryService.getAllUsersTasks().subscribe(response => {
       if (response['status'] === 'OK') {
         this.allTasks = response['data'];
+        localStorage.setItem('usersTasksDetails', JSON.stringify(this.allTasks));
         this.setSplitTasks();
       }
     });
@@ -140,7 +148,15 @@ export class DashboardComponent implements OnInit {
     this.pendingTasks = this.allTasks.filter(task => task['completed_status'] === 0);
     this.completedTasks = this.allTasks.filter(task => task['completed_status'] === 1);
     this.rejectedTasks = this.allTasks.filter(task => task['completed_status'] === 2);
+    const count = this.pendingTasks.length;
+    subject.subscribe((count) => {
+      console.log('Subscriber:', count);
+    });
+    subject.complete();
+
   }
+
+
 
   viewMyTask(taskId) {
     const userLoggedInId = localStorage.getItem('userLoggedIn');

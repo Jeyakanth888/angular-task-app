@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { Router, RoutesRecognized } from '@angular/router';
@@ -15,7 +15,11 @@ export class MyNavComponent implements OnInit {
   userRole: String;
   loggedUserName: String;
   userId: String;
+ 
+  @Input('userNewTasksCount') userNewTasksCount: Number;
+
   constructor(private breakpointObserver: BreakpointObserver, private router: Router) {
+    console.log(this.userNewTasksCount);
   }
 
   ngOnInit() {

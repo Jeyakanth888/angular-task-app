@@ -27,3 +27,7 @@
 a.btn-logout {
   cursor:pointer;
 }
+
+span.notification {
+  cursor:pointer;
+}

@@ -12,7 +12,7 @@ import {
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
-  SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider
+  SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider, LinkedinLoginProvider
 } from 'angular-6-social-login';
 import { RegistrationComponent } from './registration/registration.component';
 import { AppRoutingModule } from './/app-routing.module';
@@ -30,6 +30,8 @@ import { AuthGuard } from './services/auth.guard';
 import { LoginService } from './services/login.service';
 import { UserTaskComponent } from './user-task/user-task.component';
 import { ViewUserTaskComponent } from './view-user-task/view-user-task.component';
+import { ExampleComponent } from './example/example.component';
+
 
 
 // Configs
@@ -63,6 +65,7 @@ export function getAuthServiceConfigs() {
     UpdatePasswordComponent,
     UserTaskComponent,
     ViewUserTaskComponent,
+    ExampleComponent,
   ],
   imports: [
     HttpClientModule,

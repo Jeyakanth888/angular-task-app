@@ -45,17 +45,29 @@ export class UserProfileComponent implements OnInit {
   dataSource: any[];
   allUsersTasks: any[];
   allTaskTopics: any[];
-
+  userAllTasks: any[];
+  clickedEditProfile: Boolean = false;
   constructor(private route: ActivatedRoute, private repositoryService: MainService) { }
 
   ngOnInit() {
     this.userId = this.route.snapshot.paramMap.get('id');
     this.userRole = localStorage.getItem('userRole');
     this.allUsersTasks = JSON.parse(localStorage.getItem('usersTasksDetails'));
+    this.loadUserAllTasks();
     this.loadUserData();
-    this.findTaskCounts();
     this.getAllTaskTopics();
     this.getUserSubmittedTasks();
+
+  }
+
+  loadUserAllTasks(): void {
+
+    this.repositoryService.getUserAllTasks(this.userId).subscribe(response => {
+      if (response['status'] === 'OK') {
+        this.userAllTasks = response['data'];
+        this.findTaskCounts();
+      }
+    });
 
   }
 
@@ -100,8 +112,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   findTaskCounts() {
-    const allUserTasks = JSON.parse(localStorage.getItem('usersTasksDetails'));
-    const getTasks = allUserTasks.filter(usersTask => usersTask['ref_id'] === this.userId);
+    // const allUserTasks = JSON.parse(localStorage.getItem('usersTasksDetails'));
+    // const getTasks = allUserTasks.filter(usersTask => usersTask['ref_id'] === this.userId);
+    const getTasks = this.userAllTasks;
     this.totalCount = getTasks.length;
     this.pendingCount = getTasks.filter(task => task['approved_status'] === 0).length;
     this.completedCount = getTasks.filter(task => task['approved_status'] === 1).length;
@@ -116,10 +129,10 @@ export class UserProfileComponent implements OnInit {
         this.submittedTaskAvailable = true;
         const taskDocDatas = respData['data'];
         const dataArr = [];
-  
+
         taskDocDatas.map((data) => {
           const taskId = data.t_id;
-        
+
           const dataObj: Object = {
             't_id': taskId, 'u_id': this.userId,
             'taskname': this.findTaskName(taskId), 'taskdate': this.findUserTaskDates(taskId, 'taskdate'),
@@ -149,11 +162,16 @@ export class UserProfileComponent implements OnInit {
 
   findUserTaskDates(tId, dateType) {
     const filterData = this.allUsersTasks.filter(userTask => userTask['t_id'] === tId && userTask['ref_id'] === this.userId);
+
     if (dateType === 'created') {
       return filterData[0].created_at;
     } else {
       return filterData[0].task_date;
     }
+  }
+
+  editUserProfile() {
+    this.clickedEditProfile = true;
   }
 
 }
